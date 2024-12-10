@@ -10,17 +10,20 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.0.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "formik": "^2.4.6",
     "next": "15.0.3",
+    "next-auth": "^4.24.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "yup": "^1.5.0"
   },
   "devDependencies": {
+    "@types/next-auth": "^3.13.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

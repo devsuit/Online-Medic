@@ -1,24 +1,51 @@
-import axios from 'axios';
+import { FormEvent } from 'react';
 
-export default function AppointmentForm({ doctorId }) {
-  const handleSubmit = async (e: { preventDefault: () => void; target: { date: { value: any; }; }; }) => {
+interface AppointmentFormProps {
+  doctorId: number;
+}
+
+const AppointmentForm: React.FC<AppointmentFormProps> = ({ doctorId }) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const date = e.target.date.value;
 
-    const response = await axios.post('/api/appointments', {
-      userId: 1, // Replace with actual logged-in user ID
-      doctorId,
-      date,
+    // Cast e.target to include specific inputs
+    const target = e.target as typeof e.target & {
+      date: { value: string };
+    };
+
+    const date = target.date.value;
+
+    const response = await fetch('/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ doctorId, date }),
     });
-    alert(`Appointment booked for ${response.data.date}`);
+
+    if (response.ok) {
+      alert('Appointment booked successfully!');
+    } else {
+      alert('Failed to book the appointment.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col p-4">
-      <input name="date" type="datetime-local" required className="mb-2" />
-      <button type="submit" className="bg-green-600 text-white px-4 py-2">
+    <form onSubmit={handleSubmit} className="p-4 border">
+      <label className="block mb-2">
+        Date:
+        <input
+          type="datetime-local"
+          name="date"
+          required
+          className="border p-2 mt-1 w-full"
+        />
+      </label>
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-4">
         Book Appointment
       </button>
     </form>
   );
-}
+};
+
+export default AppointmentForm;

@@ -1,9 +1,7 @@
-import React from 'react'
-
-function Footer() {
+export default function Footer() {
   return (
-    <div>Footer</div>
-  )
+    <footer className="bg-gray-800 text-white p-4 text-center">
+      &copy; 2024 Online Medic. All rights reserved.
+    </footer>
+  );
 }
-
-export default Footer

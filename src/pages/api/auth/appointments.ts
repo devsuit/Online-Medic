@@ -1,21 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const prisma = new PrismaClient();
+const appointments = [];
 
-export default async function handler(req, res) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { userId, doctorId, date } = req.body;
 
-    const appointment = await prisma.appointment.create({
-      data: {
-        userId,
-        doctorId,
-        date,
-      },
-    });
+    const newAppointment = {
+      id: appointments.length + 1,
+      userId,
+      doctorId,
+      date,
+    };
 
-    res.status(200).json(appointment);
-  } else {
-    res.status(405).json({ message: 'Method not allowed' });
+    appointments.push(newAppointment);
+
+    return res.status(201).json(newAppointment);
   }
+
+  res.status(405).json({ message: 'Method not allowed' });
 }

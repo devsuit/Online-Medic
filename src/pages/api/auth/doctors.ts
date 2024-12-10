@@ -1,18 +1,23 @@
-import { PrismaClient } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const prisma = new PrismaClient();
+const doctors = [
+  { id: 1, name: 'Dr. Smith', specialty: 'Cardiology', city: 'New York' },
+  { id: 2, name: 'Dr. Jane', specialty: 'Dermatology', city: 'Los Angeles' },
+];
 
-export default async function handler(req, res) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { specialty, city } = req.query;
-    const doctors = await prisma.doctor.findMany({
-      where: {
-        AND: [
-          { specialty: { contains: specialty || '' } },
-          { city: { contains: city || '' } },
-        ],
-      },
+
+    const filteredDoctors = doctors.filter((doctor) => {
+      return (
+        (!specialty || doctor.specialty === specialty) &&
+        (!city || doctor.city === city)
+      );
     });
-    res.status(200).json(doctors);
+
+    return res.status(200).json(filteredDoctors);
   }
+
+  res.status(405).json({ message: 'Method not allowed' });
 }
